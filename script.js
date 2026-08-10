@@ -3,16 +3,23 @@ const creatorImage = document.getElementById('creatorImage');
 
 function showImage(img) {
   if (!img) return;
+
   const reveal = () => {
-    if (img.naturalWidth > 0) {
-      img.hidden = false;
-      const empty = img.parentElement?.querySelector('.image-empty');
-      if (empty) empty.hidden = true;
-    }
+    img.removeAttribute('hidden');
+    img.style.display = 'block';
+    const empty = img.parentElement?.querySelector('.image-empty');
+    if (empty) empty.style.display = 'none';
   };
-  if (img.complete) reveal();
-  img.addEventListener('load', reveal, { once: true });
-  img.addEventListener('error', () => { img.hidden = true; }, { once: true });
+
+  if (img.complete && img.naturalWidth > 0) {
+    reveal();
+  } else {
+    img.addEventListener('load', reveal, { once: true });
+  }
+
+  img.addEventListener('error', () => {
+    console.error('Gagal memuat gambar:', img.src);
+  }, { once: true });
 }
 
 showImage(teacherImage);
